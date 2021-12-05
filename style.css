@@ -1,0 +1,25 @@
+html {
+	background-color:#111111;
+
+	font-family:monospace,sans-serif;
+	color:#BBBBBB;
+}
+
+body {
+	margin:auto;
+	max-width:80%;
+}
+
+footer {
+	border:10px;
+	border-color:red;
+}
+
+footer p {
+	border:10px;
+	margin:auto;
+}
+
+a {
+	color:inherit;
+}
