@@ -1,3 +1,5 @@
+DESTDIR ?= live
+
 SUBDIRS := txt
 
 ALL_MD := index.md $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*md))
@@ -20,6 +22,8 @@ ALL := $(ALL_HTML) $(EXTRA_FILES)
 
 all: $(ALL)
 
+install: $(foreach f,$(ALL),$(DESTDIR)/$(f))
+
 %.html: %.md
 	lowdown \
 		$(LOWDOWN_ARGS_DEFAULT) \
@@ -30,6 +34,14 @@ all: $(ALL)
 # fix hyperlinks pointing to markdown files
 	sed -i $(@).tmp -e 's/\.md"/\.html"/'
 	mv $(@).tmp $(@)
+
+$(DESTDIR)/%: ./%
+	install \
+		-t "$(DESTDIR)/$$(dirname "$(*)")" -Dm644 \
+		"$(*)"
+	rm -f $(ALL_HTML)
+
+
 
 publish: $(TRACKED_HTML) $(EXTRA_FILES)
 	printf '%s\n' \
@@ -51,5 +63,6 @@ publish: $(TRACKED_HTML) $(EXTRA_FILES)
 
 clean:
 	rm -f $(ALL_HTML)
+	rm -rf $(DESTDIR)
 
 .PHONY: all clean install publish
