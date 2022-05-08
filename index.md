@@ -2,8 +2,9 @@
 
 ---
 
-## My interests in digital life
+## About me
 
+* [Blog](./txt/index.md)
 * Open source software development
 * Security
 * Privacy
