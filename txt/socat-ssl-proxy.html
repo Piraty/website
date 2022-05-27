@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="author" content="Piraty" />
+<meta name="date" scheme="YYYY-MM-DD" content="2022-05-09" />
+<link rel="stylesheet" href="../style.css" />
+<title>Allow Old Software To Use Https That Was Never Meant To</title>
+</head>
+<body>
+
+<h1 id="Allow%20Old%20Software%20To%20Use%20Https%20That%20Was%20Never%20Meant%20To">Allow Old Software To Use Https That Was Never Meant To</h1>
+
+<p>Make streamripper, although it lacks support for https, connect to shoutcast
+streams over https.</p>
+
+<h2 id="TLDR">TLDR</h2>
+
+<p>To make software connect to a TLS encrypted hypertext protocol connection that
+on its own has no means to talk TLS, I recently found out that
+<a href="http://www.dest-unreach.org/socat/">socat</a> is a great fit.
+In other words, it can unwrap the TLS layer and relay plain http.</p>
+
+<p>If</p>
+
+<pre><code>${APP} https:&#47;&#47;${host}:${port}&#47;some&#47;resource.txt
+</code></pre>
+
+<p>doesn&#8217;t work, do this:</p>
+
+<pre><code>socat "TCP-LISTEN:${localport}" "OPENSSL:${host}:${port}" &#38;
+
+${APP} http:&#47;&#47;localhost:${localport}&#47;some&#47;resource.txt
+</code></pre>
+
+<h2 id="Long%20Version">Long Version</h2>
+
+<p>I use <a href="streamripper.sourceforge.net/">streamripper</a> ever since i used the audio
+player that really whipped the llama&#8217;s ass <sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>.
+It was one of the first packages i ever contributed to Void Linux
+<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>, it didn&#8217;t have a release in 13 years and it has no support
+for TLS&#47;https whatsoever.</p>
+
+<p>I recently configured some runit user-services on my VPS to rip some of my
+favorite radio streams 24&#47;7 that i would sync to a thumb drive every now and
+then to listen to it in my car or on my phone <sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>.
+All stations offer shoutcast over https as well as plain http, which is fine
+for streamripper.</p>
+
+<p>When i listened to ripped files the other day, with one particular stream i
+recognized an oddity: mp3 stream over https is sent in stereo, mp3 stream over
+plain http is sent in mono.
+Huh?</p>
+
+<p>Simply switching the URL to https resulted in</p>
+
+<pre><code>$ streamripper https:&#47;&#47;some.stream.com:9999&#47;station.mp3 -d &#47;tmp&#47; --debug
+
+Connecting...
+
+error -7 [SR_ERROR_RECV_FAILED]
+
+bye..
+
+shutting down
+</code></pre>
+
+<p>This is unacceptible and i started to poke.
+I inspected the source code, found many oddities with the repo, commit history,
+the code itself and the build system (all that deserves its own blog post) and
+finally decided that i&#8217;m not the one adding TLS support to streamripper (not
+this time at least).</p>
+
+<p>After asking people more literated than me, i was hinted at socat and quickly
+found that others <sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> wrote about this specific problem already,
+albeit in a slightly different use case.</p>
+
+<p>So finally, the service file roughly look like this:
+It starts an instance of socat that connects the the remote stream and relays
+the un-TLS&#8217;ed http to localhost, which streamripper then happily connects to.</p>
+
+<pre><code>opts=
+defOpts=
+defOpts="$defOpts -r 8000" # relay
+defOpts="$defOpts -z" # don&#39;t scan ports
+defOpts="$defOpts -o larger"
+
+. .&#47;conf
+socat "TCP-LISTEN:${port}" "OPENSSL:${host}:${port}" &#38;
+streamripper "$url" $defOpts $opts
+</code></pre>
+
+<p>Mission accomplished.</p>
+
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p><a href="https://web.archive.org/web/20050401094645/http://www.winamp.com/">Winamp</a>&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p><a href="https://github.com/void-linux/void-packages/commit/ee47f40f4d">void-packages@ee47f40f4d</a>&#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p><a href="https://www.pine64.org/pinephone/">Pinephone</a>&#160;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn4">
+<p><a href="https://web.archive.org/web/20220508215724/http://heapspray.net/post/using-socat-to-proxy-ssl-connections/">http:&#47;&#47;heapspray.net&#47;post&#47;using-socat-to-proxy-ssl-connections&#47;</a>&#160;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+</body>
+</html>
