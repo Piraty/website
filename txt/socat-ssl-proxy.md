@@ -67,7 +67,7 @@ found that others [^heapsprayblog] wrote about this specific problem already,
 albeit in a slightly different use case.
 
 So finally, the service file roughly look like this:
-It starts an instance of socat that connects the the remote stream and relays
+It starts an instance of socat that connects the remote stream and relays
 the un-TLS'ed http to localhost, which streamripper then happily connects to.
 
 	opts=
