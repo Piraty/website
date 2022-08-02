@@ -36,15 +36,15 @@ ${APP} http:&#47;&#47;localhost:${localport}&#47;some&#47;resource.txt
 
 <h2 id="long-version">Long Version</h2>
 
-<p>I use <a href="streamripper.sourceforge.net/">streamripper</a> ever since i used the audio
-player that really whipped the llama&#8217;s ass <sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>.
+<p>I use streamripper <sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> ever since i used the audio
+player that really whipped the llama&#8217;s ass <sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.
 It was one of the first packages i ever contributed to Void Linux
-<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>, it didn&#8217;t have a release in 13 years and it has no support
+<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>, it didn&#8217;t have a release in 13 years and it has no support
 for TLS&#47;https whatsoever.</p>
 
 <p>I recently configured some runit user-services on my VPS to rip some of my
 favorite radio streams 24&#47;7 that i would sync to a thumb drive every now and
-then to listen to it in my car or on my phone <sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>.
+then to listen to it in my car or on my phone <sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup>.
 All stations offer shoutcast over https as well as plain http, which is fine
 for streamripper.</p>
 
@@ -73,7 +73,7 @@ finally decided that i&#8217;m not the one adding TLS support to streamripper (n
 this time at least).</p>
 
 <p>After asking people more literated than me, i was hinted at socat and quickly
-found that others <sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> wrote about this specific problem already,
+found that others <sup id="fnref5"><a href="#fn5" rel="footnote">5</a></sup> wrote about this specific problem already,
 albeit in a slightly different use case.</p>
 
 <p>So finally, the service file roughly look like this:
@@ -98,19 +98,23 @@ streamripper "$url" $defOpts $opts
 <ol>
 
 <li id="fn1">
-<p><a href="https://web.archive.org/web/20050401094645/http://www.winamp.com/">Winamp</a>&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+<p><a href="http://streamripper.sourceforge.net/">Streamripper</a> &#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
 </li>
 
 <li id="fn2">
-<p><a href="https://github.com/void-linux/void-packages/commit/ee47f40f4d">void-packages@ee47f40f4d</a>&#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+<p><a href="https://web.archive.org/web/20050401094645/http://www.winamp.com/">Winamp</a>&#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
 </li>
 
 <li id="fn3">
-<p><a href="https://www.pine64.org/pinephone/">Pinephone</a>&#160;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+<p><a href="https://github.com/void-linux/void-packages/commit/ee47f40f4d">void-packages@ee47f40f4d</a>&#160;<a href="#fnref3" rev="footnote">&#8617;</a></p>
 </li>
 
 <li id="fn4">
-<p><a href="https://web.archive.org/web/20220508215724/http://heapspray.net/post/using-socat-to-proxy-ssl-connections/">http:&#47;&#47;heapspray.net&#47;post&#47;using-socat-to-proxy-ssl-connections&#47;</a>&#160;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+<p><a href="https://www.pine64.org/pinephone/">Pinephone</a>&#160;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn5">
+<p><a href="https://web.archive.org/web/20220508215724/http://heapspray.net/post/using-socat-to-proxy-ssl-connections/">http:&#47;&#47;heapspray.net&#47;post&#47;using-socat-to-proxy-ssl-connections&#47;</a>&#160;<a href="#fnref5" rev="footnote">&#8617;</a></p>
 </li>
 
 </ol>
