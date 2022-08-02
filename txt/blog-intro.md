@@ -16,7 +16,7 @@ Here is the code: https://github.com/Piraty/piraty.github.io
 ## Intro
 
 Finding a static generator that fits my needs in 2022 is actually hard.
-It's not that there none, quite the opposite: there are way too many.
+It's not that there are none, quite the opposite: there are way too many.
 There are even catalog sites like [staticgen](https://www.staticgen.com/) that
 try to shed light into this forrest of projects.
 
