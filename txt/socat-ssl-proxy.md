@@ -27,7 +27,7 @@ doesn't work, do this:
 
 ## Long Version
 
-I use [streamripper](streamripper.sourceforge.net/) ever since i used the audio
+I use streamripper [^streamripper] ever since i used the audio
 player that really whipped the llama's ass [^winamp].
 It was one of the first packages i ever contributed to Void Linux
 [^streamripper-pr], it didn't have a release in 13 years and it has no support
@@ -87,3 +87,4 @@ Mission accomplished.
 [^phone]: [Pinephone](https://www.pine64.org/pinephone/)
 [^streamripper-pr]: [void-packages@ee47f40f4d](https://github.com/void-linux/void-packages/commit/ee47f40f4d)
 [^winamp]: [Winamp](https://web.archive.org/web/20050401094645/http://www.winamp.com/)
+[^streamripper]: [Streamripper](http://streamripper.sourceforge.net/) 
