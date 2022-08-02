@@ -52,7 +52,7 @@ publish: $(TRACKED_HTML) $(EXTRA_FILES)
 		> .PUBLISH_COMMIT
 	-git branch live
 	git checkout live
-	git merge master
+	git merge --no-edit master
 	make clean
 	make all
 	git add -f $(^)
