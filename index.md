@@ -1,3 +1,7 @@
+title: Piraty
+date: 2022-05-09
+css:./style.css
+
 # Piraty
 
 ---
@@ -37,7 +41,7 @@ Have a peek at my [dotfiles](https://github.com/Piraty/dotfiles).
 
 ## Contact
 
-* [piraty1@inbox.ru](mailto:piraty1@inbox.ru)
+* [mail@piraty.dev](mailto:mail@piraty.dev)
 * [Pubkey](./0x82F2CC796BD07077.pub.asc), Fingerprint: E294 C8A2 4446 B7CA 8C53 2107 82F2 CC79 6BD0 7077
 * [github.com/Piraty](https://www.github.com/piraty)
 
