@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="author" content="Piraty" />
+<meta name="date" scheme="YYYY-MM-DD" content="2023-03-27" />
+<link rel="stylesheet" href="../style.css" />
+<title>Piraty&#47;txt&#47;thunderbird-external-gnupg-for-private-keys</title>
+</head>
+<body>
+
+<h1 id="thunderbird-external-gnupg">Thunderbird + External GnuPG</h1>
+
+<p>Here are some rough notes on how and why to avoid importing private PGP keys
+into Thunderbird, and make it ask external gnupg for them, thus behave similar
+to now-obsolete Enigmail did.</p>
+
+<p>A side-effect for me is it is a step forward to my PGP+Yubikey setup.</p>
+
+<h2 id="tldr">TLDR</h2>
+
+<p>Ever since Thunderbird-v78 happened in 2020 i hated that their support for PGP
+degraded significantly.</p>
+
+<p>Fortunately you can at least opt-out of the secret-key managing madness and
+keep your private keys where they belong (and <em>only</em> there): gnupg keyring.</p>
+
+<ol>
+<li>In Config Editor, set <code>mail.openpgp.allow_external_gnupgmail.openpgp.allow_external_gnupg</code> to <em>true</em>.</li>
+<li>Delete previously imported private keys from Thunderbird&#8217;s keyring, in case you imported them already</li>
+<li>Add &#8220;external key&#8221;(s) with your keyID (strip the leading <code>0x</code>!) </li>
+<li>Import relevant public keys into &#8220;OpenPGP Key Manager&#8221; (receipients&#8217; and likely your own)</li>
+<li>Make sure no private keys appear in Thunderbird&#8217;s &#8220;OpenPGP Key Manager&#8221;</li>
+</ol>
+
+<p>Basically follow the <a href="https://web.archive.org/web/20230326232007/https://wiki.mozilla.org/Thunderbird:OpenPGP:Smartcards#Allow_the_use_of_external_GnuPG">GnuPG smartcard guide</a></p>
+
+<h2 id="background">Background</h2>
+
+<h3 id="thunderbird-v78-does-openpgp-on-its-own">Thunderbird v78+ Does OpenPGP On Its Own</h3>
+
+<p>Before v78, Thunderbird allowed the use of OpenPGP by using Enigmail addon,
+which served as a proxy to your host&#8217;s gnupg.
+It provided normal and advanced config modes and was very mature PGP frontend
+interface.</p>
+
+<p>It was therefore the responsibility and burden of the user to configure an
+OpenPGP compliant host software like gnupg on the platform.</p>
+
+<p>With v78+, Enigmail ceased to be and shipped a migration dialog with its last
+release, offering to import public <em>and</em> private keys into Thunderbird.
+Instead of using external gnupg, Thunderbird now comes with a bundles library
+to perform PGP operations.</p>
+
+<p>This has some downsides.</p>
+
+<h3 id="how-thunderbird-manages-private-keys">How Thunderbird Manages Private Keys</h3>
+
+<p>Quoting from <a href="https://web.archive.org/web/20230326232606/https://support.mozilla.org/en-US/kb/openpgp-thunderbird-howto-and-faq#w_how-is-my-personal-key-protected">OpenPGP in Thunderbird - HOWTO and FAQ</a>:</p>
+
+<blockquote>
+<p>At the time you import your personal key into Thunderbird, we unlock it, and
+protect it with a different password, that is automatically (randomly)
+created. The same automatic password will be used for all OpenPGP secret keys
+managed by Thunderbird. You should use the Thunderbird feature to set a
+Primary Password. Without a Primary Password, your OpenPGP keys in your
+profile directory are unprotected.</p>
+</blockquote>
+
+<h3 id="the-downsides">The Downsides</h3>
+
+<p>&#8220;Handling&#8221; PGP keys this way feels awkward and wrong to me&#8230; it&#8217;s sensitive
+material afterall.</p>
+
+<p>Thunderbird&#8217;s OpenPGP feature assumes you have both no other use for PGP keys
+other than email and also can afford to trust Thunderbird&#8217;s management of
+keyring and your profile&#8217;s Primary Password.
+Having other use-case while using Thunderbird&#8217;s internal keyring means having to
+deal with key management twice.
+Their wiki is a bit <a href="https://wiki.mozilla.org/Thunderbird:OpenPGP:Migration-From-Enigmail">vague on this</a>
+on intentions of the decision.</p>
+</body>
+</html>
