@@ -1,7 +1,3 @@
-DESTDIR ?= live
-
-SUBDIRS := txt
-
 ALL_MD := $(shell find -type f -iname '*.md' | sort)
 TRACKED_MD := $(shell git ls-files '*.md' | grep -v '^README\.md$$')
 EXTRA_FILES := \
@@ -22,8 +18,6 @@ ALL := $(ALL_HTML) $(EXTRA_FILES)
 
 all: $(ALL)
 
-install: $(foreach f,$(ALL),$(DESTDIR)/$(f))
-
 %.html: %.md
 	lowdown \
 		$(LOWDOWN_ARGS_DEFAULT) \
@@ -34,14 +28,6 @@ install: $(foreach f,$(ALL),$(DESTDIR)/$(f))
 # fix hyperlinks pointing to markdown files
 	sed -i $(@).tmp -e 's/\.md"/\.html"/'
 	mv $(@).tmp $(@)
-
-$(DESTDIR)/%: ./%
-	install \
-		-t "$(DESTDIR)/$$(dirname "$(*)")" -Dm644 \
-		"$(*)"
-	rm -f $(ALL_HTML)
-
-
 
 publish: $(TRACKED_HTML) $(EXTRA_FILES)
 	printf '%s\n' \
@@ -62,6 +48,6 @@ publish: $(TRACKED_HTML) $(EXTRA_FILES)
 
 clean:
 	rm -f $(ALL_HTML)
-	rm -rf $(DESTDIR)
+	rm -f .PUBLISH_COMMIT
 
-.PHONY: all clean install publish
+.PHONY: all clean publish
