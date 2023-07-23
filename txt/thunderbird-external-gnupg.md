@@ -2,6 +2,10 @@ title: Piraty/txt/thunderbird-external-gnupg-for-private-keys
 date: 2023-03-27
 css:../style.css
 
+# [Piraty](../index.md) / [txt](./index.md)
+
+---
+
 # Thunderbird + External GnuPG
 
 Here are some rough notes on how and why to avoid importing private PGP keys

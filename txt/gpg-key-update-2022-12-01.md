@@ -2,6 +2,10 @@ title: GPG Key Update
 date: 2022-12-01
 css:../style.css
 
+# [Piraty](../index.md) / [txt](./index.md)
+
+---
+
 # GPG Key Update
 
 Heads up, my updated key is posted on the

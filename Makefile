@@ -26,7 +26,7 @@ all: $(ALL)
 		-o $(@).tmp \
 		$(^)
 # fix hyperlinks pointing to markdown files
-	sed -i $(@).tmp -e 's/\.md"/\.html"/'
+	sed -i $(@).tmp -e 's/\.md"/\.html"/g'
 	mv $(@).tmp $(@)
 
 publish: $(TRACKED_HTML) $(EXTRA_FILES)

@@ -2,7 +2,9 @@ title: Piraty/txt
 date: 2023-03-27
 css:../style.css
 
-# txt
+# [Piraty](../index.md) / txt
+
+---
 
 * 2023-03-27 [Thunderbird + External GnuPG](./thunderbird-external-gnupg.md)
 * 2022-12-01 [GPG Key update](./gpg-key-update-2022-12-01.md)
