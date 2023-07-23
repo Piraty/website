@@ -2,8 +2,8 @@ DESTDIR ?= live
 
 SUBDIRS := txt
 
-ALL_MD := index.md $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*md))
-TRACKED_MD := index.md $(shell git ls-files | grep '\.md$$')
+ALL_MD := $(shell find -type f -iname '*.md' | sort)
+TRACKED_MD := $(shell git ls-files '*.md' | grep -v '^README\.md$$')
 EXTRA_FILES := \
 	style.css \
 	0x82F2CC796BD07077.pub.asc
@@ -45,7 +45,7 @@ $(DESTDIR)/%: ./%
 
 publish: $(TRACKED_HTML) $(EXTRA_FILES)
 	printf '%s\n' \
-		"published from: $(shell git log --format='%H' master | head -n1)" \
+		"published from: $(shell git show --no-patch --format="reference" HEAD)" \
 		"" \
 		"this commit was made by 'make publish'" \
 		"real work happens on master" \
