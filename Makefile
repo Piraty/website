@@ -53,8 +53,7 @@ publish: $(TRACKED_HTML) $(EXTRA_FILES)
 	-git branch live
 	git checkout live
 	git merge --no-edit master
-	make clean
-	make all
+	make -B -j$$(nproc) $(^)
 	git add -f $(^)
 	git commit --file .PUBLISH_COMMIT
 	rm .PUBLISH_COMMIT
