@@ -2,6 +2,10 @@ title: I chose boring tech for this blog
 date: 2022-05-08
 css:../style.css
 
+# [Piraty](../index.md) / [txt](./index.md)
+
+---
+
 # I Chose Boring Tech For This Site
 
 Everybody and their grandma needs a blog, so here is mine.

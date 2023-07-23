@@ -2,6 +2,10 @@ title: Allow Old Software To Use Https That Was Never Meant To
 date: 2022-05-09
 css:../style.css
 
+# [Piraty](../index.md) / [txt](./index.md)
+
+---
+
 # Allow Old Software To Use Https That Was Never Meant To
 
 Make streamripper, although it lacks support for https, connect to shoutcast
