@@ -46,7 +46,7 @@ OpenPGP compliant host software like gnupg on the platform.
 
 With v78+, Enigmail ceased to be and shipped a migration dialog with its last
 release, offering to import public *and* private keys into Thunderbird.
-Instead of using external gnupg, Thunderbird now comes with a bundles library
+Instead of using external gnupg, Thunderbird now comes with a bundled library
 to perform PGP operations.
 
 This has some downsides.
