@@ -16,7 +16,7 @@ good.
 Overall, I can recommend it as a good and cost-effective (at least in the space
 of spit/ergonomic keyboards) keyboard for those who want to dip their toe into
 the space of ergonmic hardware without investing too much, be it regading
-monetary or learning aspect.
+money or learning aspect.
 
 ## How It Began
 
