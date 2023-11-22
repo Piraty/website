@@ -51,7 +51,7 @@ Have a peek at my [dotfiles](https://github.com/Piraty/dotfiles).
 <!-- Fuck nodeJS and electron -->
 This site is built using
 ~~the latest and gratest cutting-edge JavaScript full stack tech~~
-[lowdown+make](https://github.com/Piraty/piraty.github.io/)
+[lowdown+make](https://github.com/Piraty/website/)
 with
 ~~a full-fledged hypertext rendering engine that also happens to feature text editing~~
 [neovim](https://neovim.io/).
