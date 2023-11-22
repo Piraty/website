@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="author" content="Piraty" />
+<meta name="date" scheme="YYYY-MM-DD" content="2023-11-22" />
+<link rel="stylesheet" href="../style.css" />
+<title>Piraty&#47;txt&#47;git-worktrees-for-efficient-multitasking-in-a-git-repository</title>
+</head>
+<body>
+<h1 id="piraty-txt"><a href="../index.html">Piraty</a> &#47; <a href="./index.html">txt</a></h1>
+<hr/>
+<h1 id="git-worktrees-for-efficient-multitasking-in-a-git-repository">Git-Worktrees For Efficient Multitasking In A Git-Repository</h1>
+<p>Use <code>git-worktree</code> to keep your sanity in a project with many branches.</p>
+<h2 id="why">Why</h2>
+<p>Working on projects that require a lot of context switching (a.k.a. branch
+switching) has some cost.</p>
+<p>Being greenly, you might still use one single checkout. When switching
+branch contect frequently, you either pull your hair over too many stashes that
+tend to roll under the bus sooner or later or you might drown in <code>WIP</code>-commits
+which lead to huge merge conflicts after rebasing to master, thus slowing you
+down when you again need to switch context while resolving the conflict.</p>
+<p>I have.</p>
+<p>Instead, I now use one git-worktree for each and every active branch and avoid
+git-stash as much as possible.  I live much more happy life ever since.</p>
+<h3 id="totally-made-up-scenario-totally">Totally made-up scenario, totally</h3>
+<p>You&#8217;re implementing that very important and mind-consuming breaking change when
+a hotfix is requested by OOps department. You stash away your current work,
+checkout a new branch and start poking into the issue, adding a lot of debug
+log statements and half-baked tests. Then a coworker calls and has some very
+urgent&#8482; refactoring ideas, which <em>of course</em> need your immediate attention
+so you <code>git add .</code>, create a WIP commit (or worse: stash again), checkout a new
+branch and start applying the proposed ideas.</p>
+<p>After pushing your refactorings, rebasing the WIP commits or pop&#8217;ing from the
+stash results in a hellofa merge conflict, which you then need to leave behind
+midst resolving, because of the upcoming peer review session.</p>
+<p>Not fun.</p>
+<h2 id="how-to-do-better-have-each-active-branch-in-a-git-worktree">How To Do Better: Have Each Active Branch In A Git-Worktree</h2>
+<p>Use one git-worktree per active branch, to be able to leave off
+mid work&#47;conflict&#47;rebase&#47;whatever and come back if you need to without slowing
+down the setup-time to get to work on other branches.
+Deal with a branch when you want to, not when you need to, at your pace.</p>
+<h3 id="project-topology">Project Topology</h3>
+<p>A project dir may look like this:</p>
+<pre><code>$ ls -1 my_project
+__master
+_v3.0.0
+_v3.0.1
+_v3.0.2
+_v3.0.2
+_v5.0.0
+feat-add-foo
+feat-add-bar
+fix-issue-1337
+fix-issue-6666
+hotfix-deadlock
+playground-migrate-to-this-other-lib
+refactor-peer-review-Alice
+refactor-peer-review-Bob
+release-3.x
+release-4.1.x
+release-4.2.x
+release-4.x
+release-5.x
+</code></pre>
+<h3 id="semantics">Semantics</h3>
+<ul>
+<li><code>__master</code> is the one and <em>only</em> real checkout with a fully populated <code>.git</code>
+gitdir.
+It&#8217;s supposed to be a clean worktree <em>all the time</em> (with passing tests
+<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> etc.)
+and all other active branches are (rebased+)merged into it.
+All worktrees are created from it like this:
+<code>git branch feat-add-foo &#38;&#38; git worktree add ..&#47;feat-add-foo feat-add-foo</code></li>
+<li><code>_v&#60;tag&#62;</code> are worktrees pointing to annotated<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>
+tags<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>.
+The leading underscore portrays that it is a tag (should be a clean worktree
+all the time too obviously, just like master).
+The idea is to have quick access to the tag&#8217;s repo state and possibly its
+release artifacts</li>
+<li>all other worktrees represent a (local or remote) branch that either is an
+LTS branch (i.e. <code>release-...-x</code> pattern, which mostly receives cherry-picked
+commits from master for bugfix&#47;feature backports) or an active branch where
+real work happens. may as well be nested like <code>jdoe&#47;playground&#47;foobar</code> if the
+branch name purports it.</li>
+</ul>
+<h3 id="workflow">Workflow</h3>
+<p>After creating a new branch, immediately populate its git-worktree:</p>
+<pre><code>git branch feat-1337
+git worktree add ..&#47;feat-1337 feat-1337
+cd ..&#47;feat-1337
+</code></pre>
+<p>Each active branch&#47;worktree usually has its own untracked TODO.md file which
+allows to keep track of current progress&#47;problems&#47;ideas&#47;blockers&#47;whatnot.</p>
+<p>If the branch is superseded or obsolete, remove the worktree and remove the
+branch:</p>
+<pre><code>cd ..&#47;master # or any related worktree
+git worktree remove ..&#47;feat-1337  # make sure it&#39;s clean, else use -f
+git branch -d feat-1337  # or -D
+git push --delete upstream feat-1337  # don&#39;t forget remote branches
+</code></pre>
+<p>Integrating the branch into master works as usual: cherry-pick&#47;rebase&#47;merge.</p>
+<p>I have several shell alias&#47;functions for these procedures and you should too!</p>
+<h2 id="benefits">Benefits</h2>
+<ul>
+<li>Quick access to code and test logs of multiple branches&#47;tags</li>
+<li>Fixing merge conflicts after rebasing a branch takes too long? Just leave it
+as is.</li>
+<li>per-worktree TODO is more accessible than maintaing the same info in the WIP
+commit&#8217;s body</li>
+</ul>
+<h2 id="other-notes">Other Notes</h2>
+<p>While this pattern avoids using stash explicitly, <code>git-rebase --autostash</code>
+(which i freqently use to bring branches up to date) will leave dangling stash
+entries if conflicts arose and i forgot to drop them.</p>
+<p>A seemingly innocent <code>git stash pop</code> in another worktree will therefore make
+you life complicated</p>
+<p>TODO</p>
+<div class="footnotes">
+<hr/>
+<ol>
+
+<li id="fn1">
+<p>you are a good citizen and ensure passing test suites on master. right?&#160;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>you are a good gitizen and use annotaded, signed tags. right?&#160;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>you are a good gitizen and prefix your release tags with <code>v</code>. right?&#160;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+</body>
+</html>
