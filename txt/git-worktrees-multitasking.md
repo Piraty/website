@@ -142,6 +142,4 @@ While this pattern avoids using stash explicitly, `git-rebase --autostash`
 entries if conflicts arose and i forgot to drop them.
 
 A seemingly innocent `git stash pop` in another worktree will therefore make
-you life complicated
-
-TODO
+your life complicated.
