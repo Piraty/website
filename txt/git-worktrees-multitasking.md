@@ -16,7 +16,7 @@ Working on projects that require a lot of context switching (a.k.a. branch
 switching) has some cost.
 
 Being greenly, you might still use one single checkout. When switching
-branch contect frequently, you either pull your hair over too many stashes that
+branch context frequently, you either pull your hair over too many stashes that
 tend to roll under the bus sooner or later or you might drown in `WIP`-commits
 which lead to huge merge conflicts after rebasing to master, thus slowing you
 down when you again need to switch context while resolving the conflict.
