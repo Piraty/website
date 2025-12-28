@@ -14,7 +14,7 @@ I used the `R-Go Split` for roughly 3 years, until the micro-usb port broke for
 good.
 
 Overall, I can recommend it as a good and cost-effective (at least in the space
-of spit/ergonomic keyboards) keyboard for those who want to dip their toe into
+of split/ergonomic keyboards) keyboard for those who want to dip their toe into
 the space of ergonmic hardware without investing too much, be it regading
 money or learning aspect.
 
