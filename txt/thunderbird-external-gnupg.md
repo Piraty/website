@@ -23,7 +23,7 @@ degraded significantly.
 Fortunately you can	at least opt-out of the secret-key managing madness and
 keep your private keys where they belong (and *only* there): gnupg keyring.
 
-1. In Config Editor, set `mail.openpgp.allow_external_gnupgmail.openpgp.allow_external_gnupg` to *true*.
+1. In Config Editor, set `mail.openpgp.allow_external_gnupg` to *true*.
 1. Delete previously imported private keys from Thunderbird's keyring, in case you imported them already
 1. Add "external key"(s) with your keyID (strip the leading `0x`!) 
 1. Import relevant public keys into "OpenPGP Key Manager" (receipients' and likely your own)
