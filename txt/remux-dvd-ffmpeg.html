@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="author" content="Piraty" />
+<meta name="date" scheme="YYYY-MM-DD" content="2026-01-22" />
+<link rel="stylesheet" href="../style.css" />
+<title>Remux DVD with Ffmpeg</title>
+</head>
+<body>
+<h1 id="piraty-txt"><a href="../index.html">Piraty</a> &#47; <a href="./index.html">txt</a></h1>
+<hr/>
+<h1 id="remux-dvd-with-ffmpeg">Remux DVD With FFmpeg</h1>
+<h2 id="intro">Intro</h2>
+<p>Remuxing your DVD will grab the DVD&#8217;s video stream and store it <em>as is</em> in a
+file on your computer (notably without re-encoding it, so you don&#8217;t lose
+quality at the expense of larger files).
+I choose a good and well-suported container format: Matroska (MKV).
+It can even embed multiple audio tracks and subtitles into the file.</p>
+<p>When I learned about remuxing dvd, I found plenty of old advice on the net,
+that told to use either of</p>
+<ol>
+<li>dubious nonfree <code>makemkv</code></li>
+<li>use FFmpeg with its <code>concat</code> demuxer</li>
+</ol>
+<p>I did not look at <code>makemkv</code>.
+The <code>ffmpeg</code>+<code>concat</code> works by piping the concatenated track files into ffmpeg.
+That approach worked for very few DVDs, but required nontrivial manual
+adjustments every time and it was unable to retain all metadata like audio
+track names and subtitle track names.
+And then I was unable to remux some DVDs
+as ffmpeg threw cryptic timestamp issues (likely I fed the wrong track files)
+but it was too opaque to understand what I did wrong.</p>
+<p>The good news is: recent <code>ffmpeg</code> gained a <code>dvdvideo</code> demuxer that does what I
+need just fine: remux the DVD video stream into matroska file, keep all audio
+tracks (with metadata like name), keep all subtitles (with metadata like name)
+and keep chapter markers.</p>
+<h2 id="prereqs">Prereqs</h2>
+<p>We just need</p>
+<ul>
+<li><code>lsdvd</code> to find out which tracks we can grab</li>
+<li><code>ffmpeg &#62;= 7</code> to remux the DVD&#8217;s tracks for us</li>
+<li><code>backupdvd</code> (optional) to produce a local copy once, to speed up the multiple
+remux attempts (for example: fine tuning ffmpeg options)</li>
+</ul>
+<h2 id="remux">Remux</h2>
+<p>Let&#8217;s use <code>lsdvd</code> to learn about all available tracks:</p>
+<pre><code>lsdvd -x &#47;dev&#47;cdrom
+# output:
+# Title: 01, Length: 01:21:44.433 Chapters: 26, ...
+# Title: 02, Length: 00:01:52.133 Chapters: 01, ...
+# ...
+</code></pre>
+<p>Title 01 is obviously the main feature.
+Note that <code>dvdbackup ... --info</code> enumerates differently and you cannot use its
+reported indices for ffmpeg.</p>
+<p>Make sure you have a copy of ffmpeg near you that sports the <code>dvdvideo</code>
+demuxer:</p>
+<pre><code>ffmpeg -hide_banner -demuxers | grep -E &#39;\s+dvdvideo&#39; || echo "oh no"
+</code></pre>
+<p>I use the <code>preindex</code> option.
+<code>ffmpeg</code>&#8217;s manpage advises us to work with
+local dvd backup in this case as will do a second pass that&#8217;s slow on the real
+optical media.
+It doubles the required space though, but it can be deleted afterwards.
+We will use <code>dvdbackup</code> for this.</p>
+<p>The remux command is implemented with ffmpeg like this:</p>
+<pre><code>SRC=&#47;dev&#47;cdrom
+TITLE_NAME=BigBugBounty
+TITLE_NUM=01
+
+# (optional)
+dvdbackup -i &#47;dev&#47;cdrom -o "$(pwd)" --mirror -n dvdbackup --progress
+SRC="$(pwd)&#47;dvdbackup&#47;VIDEO_TS"
+
+# remux DVD
+# keep all audio streams + subs + chapters
+ffmpeg \
+    -nostdin \
+    -y \
+    -hide_banner \
+    -stats \
+    -f dvdvideo \
+    -preindex 1 \
+    -title "$TITLE_NUM" \
+    -i "$SRC" \
+    -map 0 -c copy -map_metadata 0 -map_chapters 0 \
+    -metadata title="${TITLE_NAME}" \
+    "${TITLE_NAME}.t-${TITLE_NUM}.mkv"
+
+# :-)
+eject
+</code></pre>
+<p>As simple as that.</p>
+<h2 id="notes-on-failed-remux-due-to-read-error">Notes On Failed Remux Due To Read Error</h2>
+<p>Some of my DVD are old and have scratches.
+Some are just dirty &#8211; clean them propery ;-) .</p>
+<p>If issue remains, here is some advice how to work around read errors:</p>
+<ul>
+<li>At times I found <code>dvdbackup</code> doesn&#8217;t seem to do a good job on scratched
+media, though it has <code>-r</code> option for read error handling, maybe you are more
+lucky with it)</li>
+<li>remux directly from the optical drive: run <code>ffmpeg</code> command with <code>-i
+&#47;dev&#47;cdrom</code> and <code>-preindex 0</code> the optical drive.</li>
+<li><code>ddrescue</code>. Not ideal but unlike a dying HDD is unlikely to cause more
+damage.
+Give it a try, if you have the time. <code>info ddrescue</code> has some hints on how to
+work with optical media.</li>
+</ul>
+</body>
+</html>
