@@ -1,4 +1,4 @@
-title: Remux DVD with Ffmpeg
+title: Remux DVD with FFmpeg
 date: 2026-01-22
 css:../style.css
 
@@ -115,8 +115,7 @@ If issue remains, here is some advice how to work around read errors:
 * At times I found `dvdbackup` doesn't seem to do a good job on scratched
   media, though it has `-r` option for read error handling, maybe you are more
   lucky with it)
-* remux directly from the optical drive: run `ffmpeg` command with `-i
-  /dev/cdrom` and `-preindex 0` the optical drive.
+* remux directly from the optical drive: `ffmpeg ... -i /dev/cdrom -preindex 0 ...`
 * `ddrescue`. Not ideal but unlike a dying HDD is unlikely to cause more
   damage.
   Give it a try, if you have the time. `info ddrescue` has some hints on how to
