@@ -6,7 +6,7 @@
 <meta name="author" content="Piraty" />
 <meta name="date" scheme="YYYY-MM-DD" content="2026-01-22" />
 <link rel="stylesheet" href="../style.css" />
-<title>Remux DVD with Ffmpeg</title>
+<title>Remux DVD with FFmpeg</title>
 </head>
 <body>
 <h1 id="piraty-txt"><a href="../index.html">Piraty</a> &#47; <a href="./index.html">txt</a></h1>
@@ -101,8 +101,7 @@ Some are just dirty &#8211; clean them propery ;-) .</p>
 <li>At times I found <code>dvdbackup</code> doesn&#8217;t seem to do a good job on scratched
 media, though it has <code>-r</code> option for read error handling, maybe you are more
 lucky with it)</li>
-<li>remux directly from the optical drive: run <code>ffmpeg</code> command with <code>-i
-&#47;dev&#47;cdrom</code> and <code>-preindex 0</code> the optical drive.</li>
+<li>remux directly from the optical drive: <code>ffmpeg ... -i &#47;dev&#47;cdrom -preindex 0 ...</code></li>
 <li><code>ddrescue</code>. Not ideal but unlike a dying HDD is unlikely to cause more
 damage.
 Give it a try, if you have the time. <code>info ddrescue</code> has some hints on how to
